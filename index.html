@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CSV Reader</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Total Price Calculator</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="total-price"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "products.csv",
+                dataType: "text",
+                success: function(data) {
+                    var lines = data.split("\n");
+                    var total = 0;
+                    for(var i = 0; i < lines.length; i++) {
+                        var cells = lines[i].split(",");
+                        if(cells.length > 1) {
+                            var price = parseFloat(cells[1]);
+                            if(!isNaN(price)) {
+                                total += price;
+                            }
+                        }
+                    }
+                    $('#total-price').html("Total Price: $" + total.toFixed(2));
+                },
+                error: function(xhr, status, error) {
+                    $('#total-price').html("Error loading CSV file");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
